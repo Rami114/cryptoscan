@@ -1,0 +1,11 @@
+{
+  "name" : "Rijndael_inv_sbox",
+  "family" : "AES",
+  "description" : "Detects the presence of a hardcoded inverse AES sbox",
+  "type" : "static",
+  "flags" : [ "0x52", "0x09", "0x6a", "0xd5" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Rijndael_inv_sbox"
+  }
+}

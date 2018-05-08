@@ -1,0 +1,11 @@
+{
+  "name" : "Rijndael_Te4",
+  "family" : "AES",
+  "description" : "Detects Rijndael_Te4",
+  "type" : "static",
+  "flags" : [ "0x63", "0x63", "0x63", "0x63", "0x7c", "0x7c", "0x7c", "0x7c" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Rijndael_Te4"
+  }
+}

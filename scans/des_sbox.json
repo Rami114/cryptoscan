@@ -1,0 +1,11 @@
+{
+  "name" : "Static DES sbox",
+  "description" : "Detects the presence of a hardcoded DES sbox",
+  "family" : "DES",
+  "type" : "static",
+  "flags" : [ "0x0e", "0x04", "0x0d", "0x01" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "DES sbox"
+  }
+}

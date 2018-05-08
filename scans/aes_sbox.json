@@ -1,0 +1,11 @@
+{
+  "name" : "Rijndael_sbox",
+  "family" : "AES",
+  "description" : "Detects the presence of a hardcoded AES sbox",
+  "type" : "static",
+  "flags" : [ "0x63", "0x7c", "0x77", "0x7b" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Rijndael_sbox"
+  }
+}

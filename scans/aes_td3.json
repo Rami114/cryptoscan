@@ -1,0 +1,11 @@
+{
+  "name" : "Rijndael_Td3",
+  "family" : "AES",
+  "description" : "Detects Rijndael_Td3",
+  "type" : "static",
+  "flags" : [ "0xa7", "0xf4", "0x51", "0x50" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Rijndael_Td3"
+  }
+}
