@@ -1,0 +1,11 @@
+{
+  "name" : "DES_pc1_right",
+  "description" : "Detects DES_pc1_right (permuted choice 1 right)",
+  "family" : "DES",
+  "type" : "static",
+  "flags" : [ "0x3e", "0x36", "0x2e", "0x26" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "DES_pc1_right"
+  }
+}

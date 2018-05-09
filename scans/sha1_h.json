@@ -1,0 +1,11 @@
+  {
+    "name" : "SHA1_h",
+    "description" : "Detects SHA1_h",
+    "family" : "SHA1",
+    "type" : "static",
+    "flags" : [ "0x67", "0x45", "0x23", "0x01" ],
+    "on_match" : {
+      "type" : "symbol",
+      "name" : "SHA1_h"
+    }
+  }
