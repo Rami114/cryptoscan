@@ -88,8 +88,12 @@ class CryptoScan:
                     # Fetch them
                     test_bytes = []
                     bytes_read = 0
-                    for _ in range(flag_count):
-                        test_byte, count = self.seek_next_byte()
+                    for i in range(flag_count):
+                        null_wanted = False
+                        if int(scan.flags[i+1], 16) == 0:
+                            self.log_info("Scan {} wants a null byte at position {}".format(scan.name, i))
+                            null_wanted = True
+                        test_byte, count = self.seek_next_byte(allow_null = null_wanted)
                         bytes_read += count
                         if test_byte is not None:
                             test_bytes.append(test_byte)
@@ -128,9 +132,13 @@ class CryptoScan:
         else:
             self.log_error('Invalid address for symbol: {address}'.format(address = address))
 
-    def seek_next_byte(self, max_dist = 15):
+    def seek_next_byte(self, max_dist = 15, allow_null = False):
         # Finds the next non-zero byte, up to max_dist
         # Default is 15 to allow up to 128 bit offsets
+        # However, if we allow nulls (presumably because we're looking for one)
+        # then we increase this limit as we will return early
+        if allow_null:
+            max_dist = (max_dist * 2) + 1
         while not self.bv.is_valid_offset(self.br.offset) and not self.br.eof:
             self.br.seek_relative(1)
         dist = 0
@@ -141,7 +149,7 @@ class CryptoScan:
                 self.br.seek_relative(1)
                 continue
             byte = int(byte.encode('hex'), 16)
-            if byte != 0:
+            if byte != 0 or allow_null:
                 return byte, dist
         return None, dist
 

@@ -1,0 +1,11 @@
+{
+  "name" : "DES_sbox8",
+  "description" : "Detects DES_sbox8",
+  "family" : "DES",
+  "type" : "static",
+  "flags" : [ "0x0d", "0x02", "0x08", "0x04" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "DES_sbox8"
+  }
+}

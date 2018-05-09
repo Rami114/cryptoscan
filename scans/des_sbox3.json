@@ -1,0 +1,11 @@
+{
+  "name" : "DES_sbox3",
+  "description" : "Detects DES_sbox3",
+  "family" : "DES",
+  "type" : "static",
+  "flags" : [ "0x0a", "0x00", "0x09", "0x0e" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "DES_sbox3"
+  }
+}
