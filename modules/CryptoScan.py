@@ -1,16 +1,19 @@
 import binaryninja as bn
+from binaryninja.plugin import BackgroundTaskThread
 import os, json
 from ScanConfig import ScanConfig
 from ScanMatch import ScanMatch
 from ScanReport import ScanReport
 
 
-class CryptoScan:
+class CryptoScan(BackgroundTaskThread):
 
     debug_address = None
 
-    def __init__(self, bv):
+    def __init__(self, bv, options):
+        BackgroundTaskThread.__init__(self, 'Beginning scan for crypto constructs...', True)
         self.bv = bv
+        self.options = options
         self.br = bn.BinaryReader(self.bv, bn.Endianness.LittleEndian)
         self.log_info('Initialising Plugin')
         self.scanconfigs = []
@@ -34,27 +37,52 @@ class CryptoScan:
                 else:
                     self.log_error('Invalid config file: {filename}'.format(filename = json_file))
 
-    def run_scan(self, options):
+    def run(self):
         results = []
-        if options['static']:
-            self.log_info('Running static constant scans')
-            results = self.run_constant_scans()
-        if options['signature']:
-            self.log_info('Running signature scans')
+
+        if self.options['static']:
+            self.log_progress('Commencing data constant scans...')
+            results.extend(self.run_data_constant_scans())
+
+            if not self.cancelled:
+                self.log_progress('Commencing IL constant scans...')
+                results.extend(self.run_il_constant_scans())
+
+        if self.options['signature'] and not self.cancelled:
+            self.log_progress('Running signature scans')
             results.extend(self.run_signature_scans())
+
+        # Proceed to results, if cancelled display notification
+        if self.cancelled:
+            self.log_progress('Cancelling scan, checking for partial results...')
+
         if len(results) is not 0:
-            self.log_info('Scan found {count} match{plural}'.format(count = len(results), plural = '' if len(results) == 1 else 'es'))
+            self.log_progress('Scan found {count} match{plural}'.format(count = len(results),
+                                                                    plural = '' if len(results) == 1 else 'es'))
             self.apply_symbols(results)
             self.display_results(results)
-        else:
-            self.log_info('No scan results found')
+        elif not self.cancelled:
+            self.log_progress('No scan results found')
+            bn.show_message_box('CryptoScan results',
+                                'No crypto constructs identified.',
+                                bn.MessageBoxButtonSet.OKButtonSet,
+                                bn.MessageBoxIcon.InformationIcon)
+        self.finish()
 
-    def run_constant_scans(self):
+    def run_il_constant_scans(self):
+        results = []
+        return results
+
+    def run_data_constant_scans(self):
         results = []
 
         scans = [scan for scan in self.scanconfigs if scan.type == 'static' and scan.enabled]
         # We use the first int as a trigger to investigate any scan further
         triggers = [scan.flags[0] for scan in scans]
+
+        progress_trigger = 5
+        start_offset = self.br.offset
+        total_distance = len(self.bv)
 
         # Single pass only, the approach is as follows:
         # We will scan a single byte at at timee. Once we hit a trigger byte,
@@ -63,23 +91,34 @@ class CryptoScan:
         # implementations of the constants (byte-array, int32, int64 and event int128)
         #
         # Downside: constants with explicit null byte sequences are a PITA
-        while not self.br.eof:
+        while not self.br.eof and not self.cancelled:
             debug = False
+
             if self.debug_address is not None and self.br.offset == int(self.debug_address, 16):
-                self.log_info("At debug address")
+                self.log_info('At debug address')
                 debug = True
 
             b = self.next_byte()
+
+            percentage = (self.br.offset - start_offset)*100 / total_distance
+            if percentage >= progress_trigger:
+                progress_trigger += 5
+                while progress_trigger < percentage:
+                    progress_trigger += 5
+                self.log_progress('Scanning data for constants ({percentage}%)'.format(percentage = percentage))
+                # Whilst log_progress is ignored
+                self.log_info('Scanning data for constants ({percentage}%)'.format(percentage = percentage))
+
             if b is None:
                 break
 
             for index, trigger in enumerate(triggers):
                 if debug:
-                    self.log_info("Checking trigger {} for scan {} against byte {}".format(trigger, scans[index].name, hex(b)))
+                    self.log_info('Checking trigger {} for scan {} against byte {}'.format(trigger, scans[index].name, hex(b)))
                 if b == int(trigger, 16):
 
                     if debug:
-                        self.log_info("Trigger match at debug address for scan {}".format(scans[index].name))
+                        self.log_info('Trigger match at debug address for scan {}'.format(scans[index].name))
 
                     scan = scans[index]
                     # See how many more values we need
@@ -91,7 +130,6 @@ class CryptoScan:
                     for i in range(flag_count):
                         null_wanted = False
                         if int(scan.flags[i+1], 16) == 0:
-                            self.log_info("Scan {} wants a null byte at position {}".format(scan.name, i))
                             null_wanted = True
                         test_byte, count = self.seek_next_byte(allow_null = null_wanted)
                         bytes_read += count
@@ -117,7 +155,7 @@ class CryptoScan:
         return results
 
     def display_results(self, results):
-        report = ScanReport(results)
+        report = ScanReport(results, self.cancelled)
         bn.show_markdown_report(report.title, report.markdown_report, report.text_report)
 
     def apply_symbols(self, results):
@@ -160,6 +198,9 @@ class CryptoScan:
             return None
         byte = self.br.read(1)
         return int(byte.encode('hex'), 16)
+
+    def log_progress(self, msg):
+        self.progress = '[CryptoScan] {message}'.format(message = msg)
 
     def log_info(self, msg):
         bn.log_info('[CryptoScan] {message}'.format(message = msg))

@@ -1,9 +1,11 @@
 
 class ScanReport:
 
-    def __init__(self, raw_results):
+    def __init__(self, raw_results, was_cancelled):
         self.raw_results = raw_results
-        self.title = 'CryptoScan report - found {count} matches'.format(count = len(raw_results))
+        self.title = '{prefix}CryptoScan report - found {count} matches'.format(
+            count = len(raw_results),
+            prefix = 'Partial ' if was_cancelled else '')
         self.text_report, self.markdown_report = self._compile_report()
 
     def _compile_report(self):
