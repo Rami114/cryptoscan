@@ -30,6 +30,7 @@ Individual scan configurations are kept in the scans subfolder. The following fi
 ## TODO
 - [ ] Add more constants 
 - [ ] Flesh out how signature detection will work
-- [ ] Deal with null bytes in the flags better
-- [ ] I'm sure there's more stuff 
+- [*] Make CryptoScan run in the background
+- [*] Deal with null bytes in the flags better
+- [ ] Detect cryptocurrencies
 
