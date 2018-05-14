@@ -1,4 +1,5 @@
 {
+	"threshold" : 50,
   "name" : "Blowfish_sbox",
   "family" : "Blowfish",
   "description" : "Detects Blowfish_sbox",
@@ -13,6 +14,7 @@
               "0xba", "0x7c", "0x90", "0x45",
               "0xf1", "0x2c", "0x7f", "0x99" ],
   "on_match" : {
+	"threshold" : 50,
     "type" : "symbol",
     "name" : "Blowfish_sbox"
   }

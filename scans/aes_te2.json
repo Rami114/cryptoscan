@@ -1,4 +1,5 @@
 {
+	"threshold" : 50,
   "name" : "Rijndael_Te2",
   "family" : "AES",
   "description" : "Detects Rijndael_Te2",
@@ -6,6 +7,7 @@
   "size" : 4,
   "flags" : [ "0x63", "0xc6", "0xa5", "0x63" ],
   "on_match" : {
+	"threshold" : 50,
     "type" : "symbol",
     "name" : "Rijndael_Te2"
   }

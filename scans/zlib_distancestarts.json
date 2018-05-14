@@ -1,4 +1,5 @@
   {
+	"threshold" : 50,
     "name" : "zinflate_distanceStarts",
     "description" : "Detects zinflate_distanceStarts",
     "family" : "zlib",
@@ -12,6 +13,7 @@
                 "0x01", "0x01", "0x01", "0x01",
                 "0x01", "0x01", "0x01", "0x01"],
     "on_match" : {
+	"threshold" : 50,
       "type" : "symbol",
       "name" : "zinflate_distanceStarts"
     }

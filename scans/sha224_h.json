@@ -1,4 +1,5 @@
   {
+	"threshold" : 50,
     "name" : "SHA224_h",
     "description" : "Detects SHA224_h",
     "family" : "SHA224",
@@ -13,6 +14,7 @@
                 "0x64", "0xf9", "0x8f", "0xa7",
                 "0xbe", "0xfa", "0x4f", "0xa4"],
     "on_match" : {
+	"threshold" : 50,
       "type" : "symbol",
       "name" : "SHA224_h"
     }

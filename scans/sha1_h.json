@@ -1,4 +1,5 @@
   {
+	"threshold" : 50,
     "name" : "SHA1_h",
     "description" : "Detects SHA1_h",
     "family" : "SHA1",
@@ -10,6 +11,7 @@
                 "0x10", "0x32", "0x54", "0x76",
                 "0xc3", "0xd2", "0xe1", "0xf0"],
     "on_match" : {
+	"threshold" : 50,
       "type" : "symbol",
       "name" : "SHA1_h"
     }

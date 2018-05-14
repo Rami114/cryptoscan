@@ -1,4 +1,5 @@
 {
+	"threshold" : 50,
   "name" : "DES_sbox5",
   "description" : "Detects DES_sbox5",
   "family" : "DES",
@@ -6,6 +7,7 @@
   "size" : 1,
   "flags" : [ "0x02", "0x0c", "0x04", "0x01" ],
   "on_match" : {
+	"threshold" : 50,
     "type" : "symbol",
     "name" : "DES_sbox5"
   }

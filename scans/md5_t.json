@@ -1,4 +1,5 @@
   {
+	"threshold" : 50,
     "name" : "MD5_t",
     "description" : "Detects MD5_t",
     "family" : "MD5",
@@ -13,6 +14,7 @@
                 "0xa8", "0x30", "0x46", "0x13",
                 "0xfd", "0x46", "0x95", "0x01"],
     "on_match" : {
+	"threshold" : 50,
       "type" : "symbol",
       "name" : "MD5_t"
     }

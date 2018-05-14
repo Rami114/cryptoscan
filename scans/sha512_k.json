@@ -1,4 +1,5 @@
   {
+	"threshold" : 50,
     "name" : "SHA512_K",
     "description" : "Detects SHA512_K",
     "family" : "SHA512",
@@ -19,6 +20,7 @@
                 "0x72", "0xbe", "0x5d", "0x74", "0xf2", "0x7b", "0x89", "0x6f",
                 "0x80", "0xde", "0xb1", "0xfe", "0x3b", "0x16", "0x96", "0xb1" ],
     "on_match" : {
+	"threshold" : 50,
       "type" : "symbol",
       "name" : "SHA512_K"
     }

@@ -1,4 +1,5 @@
   {
+	"threshold" : 50,
     "name" : "MD5_initstate",
     "description" : "MD5_initstate MD5_initstate",
     "family" : "MD5",
@@ -9,6 +10,7 @@
                 "0x98", "0xba", "0xdc", "0xfe",
                 "0x10", "0x32", "0x54", "0x76"],
     "on_match" : {
+	"threshold" : 50,
       "type" : "symbol",
       "name" : "MD5_initstate"
     }

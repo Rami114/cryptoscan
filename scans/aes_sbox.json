@@ -1,4 +1,5 @@
 {
+	"threshold" : 50,
   "name" : "Rijndael_sbox",
   "family" : "AES",
   "description" : "Detects the presence of a hardcoded AES sbox",
@@ -6,6 +7,7 @@
   "size" : 1,
   "flags" : [ "0x63", "0x7c", "0x77", "0x7b" ],
   "on_match" : {
+	"threshold" : 50,
     "type" : "symbol",
     "name" : "Rijndael_sbox"
   }
