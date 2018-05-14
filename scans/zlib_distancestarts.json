@@ -1,0 +1,18 @@
+  {
+    "name" : "zinflate_distanceStarts",
+    "description" : "Detects zinflate_distanceStarts",
+    "family" : "zlib",
+    "type" : "static",
+    "size" : 4,
+    "flags" : [ "0x01", "0x02", "0x03", "0x04",
+                "0x05", "0x07", "0x09", "0x0d",
+                "0x11", "0x19", "0x21", "0x31",
+                "0x41", "0x61", "0x81", "0xc1",
+                "0x01", "0x81", "0x01", "0x01",
+                "0x01", "0x01", "0x01", "0x01",
+                "0x01", "0x01", "0x01", "0x01"],
+    "on_match" : {
+      "type" : "symbol",
+      "name" : "zinflate_distanceStarts"
+    }
+  }

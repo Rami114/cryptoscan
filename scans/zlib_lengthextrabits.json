@@ -1,0 +1,18 @@
+  {
+    "name" : "zinflate_lengthExtraBits",
+    "description" : "Detects zinflate_lengthExtraBits",
+    "family" : "zlib",
+    "type" : "static",
+    "size" : 4,
+    "flags" : [ "0x00", "0x00", "0x00", "0x00",
+                "0x00", "0x00", "0x00", "0x00",
+                "0x01", "0x01", "0x01", "0x01",
+                "0x02", "0x02", "0x02", "0x02",
+                "0x03", "0x03", "0x03", "0x03",
+                "0x04", "0x04", "0x04", "0x04",
+                "0x05", "0x05", "0x05", "0x05"],
+    "on_match" : {
+      "type" : "symbol",
+      "name" : "zinflate_lengthExtraBits"
+    }
+  }

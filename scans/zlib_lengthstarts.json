@@ -1,0 +1,18 @@
+  {
+    "name" : "zinflate_lengthStarts",
+    "description" : "Detects zinflate_lengthStarts",
+    "family" : "zlib",
+    "type" : "static",
+    "size" : 4,
+    "flags" : [ "0x03", "0x04", "0x05", "0x06",
+                "0x07", "0x08", "0x09", "0x0a",
+                "0x0b", "0x0d", "0x0f", "0x11",
+                "0x13", "0x17", "0x1b", "0x1f",
+                "0x23", "0x2b", "0x33", "0x3b",
+                "0x43", "0x53", "0x63", "0x73",
+                "0x83", "0xa3", "0xc3", "0xe3"],
+    "on_match" : {
+      "type" : "symbol",
+      "name" : "zinflate_lengthStarts"
+    }
+  }
