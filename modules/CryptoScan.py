@@ -42,7 +42,7 @@ class CryptoScan(BackgroundTaskThread):
 
         if self.options['static']:
             self.log_progress('Commencing data constant scans...')
-            #results.extend(self.run_data_constant_scans())
+            results.extend(self.run_data_constant_scans())
 
             if not self.cancelled:
                 self.log_progress('Commencing IL constant scans...')
@@ -110,17 +110,14 @@ class CryptoScan(BackgroundTaskThread):
         # We use the first int as a trigger to investigate any scan further
         triggers = [scan.flags[0] for scan in scans]
 
+        # Where implementations can be multi-byte, we should check opposite byte order too
+        multi_byte_scans = [scan for scan in self.scanconfigs if scan.size > 1]
+        inverse_triggers = [scan.inverse_flags[0] for scan in multi_byte_scans]
+
         progress_trigger = 5
         start_offset = self.br.offset
         total_distance = len(self.bv)
 
-        # Single pass only, the approach is as follows:
-        # We will scan a single byte at at timee. Once we hit a trigger byte,
-        # we then scan ahead and check if subsequent bytes are valid flag bytes.
-        # However, we do this by seeking past null-bytes, which copes with different
-        # implementations of the constants (byte-array, int32, int64 and event int128)
-        #
-        # Downside: constants with explicit null byte sequences are a PITA
         while not self.br.eof and not self.cancelled:
             debug = False
 
@@ -166,6 +163,41 @@ class CryptoScan(BackgroundTaskThread):
 
                     # Sanity check we got enough bytes and confirm the match
                     if len(test_bytes) == flag_count and test_bytes == [int(tb, 16) for tb in scan.flags[1:]]:
+                        # Save the match with the address
+                        address = self.br.offset - (bytes_read+1)
+                        result = DataConstantScanMatch(scan, address)
+                        results.append(result)
+
+                    # Track back irrespective
+                    self.br.offset -= bytes_read
+
+            # And reverse byte order
+            for index, trigger in enumerate(inverse_triggers):
+                if debug:
+                    self.log_info('Checking inverse trigger {} for scan {} against byte {}'.format(trigger, multi_byte_scans[index].name, hex(b)))
+                if b == int(trigger, 16):
+
+                    if debug:
+                        self.log_info('Inverse trigger match at debug address for scan {}'.format(multi_byte_scans[index].name))
+
+                    scan = multi_byte_scans[index]
+                    # See how many more values we need
+                    flag_count = len(scan.inverse_flags) - 1
+
+                    # Fetch them
+                    test_bytes = []
+                    bytes_read = 0
+                    for i in range(flag_count):
+                        null_wanted = False
+                        if int(scan.inverse_flags[i+1], 16) == 0:
+                            null_wanted = True
+                        test_byte, count = self.seek_next_byte(allow_null = null_wanted)
+                        bytes_read += count
+                        if test_byte is not None:
+                            test_bytes.append(test_byte)
+
+                    # Sanity check we got enough bytes and confirm the match
+                    if len(test_bytes) == flag_count and test_bytes == [int(tb, 16) for tb in scan.inverse_flags[1:]]:
                         # Save the match with the address
                         address = self.br.offset - (bytes_read+1)
                         result = DataConstantScanMatch(scan, address)
