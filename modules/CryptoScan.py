@@ -2,7 +2,7 @@ import binaryninja as bn
 from binaryninja.plugin import BackgroundTaskThread
 import os, json
 from ScanConfig import ScanConfig
-from ScanMatch import ScanMatch
+from ScanMatch import DataConstantScanMatch, ILConstantScanMatch
 from ScanReport import ScanReport
 
 
@@ -42,7 +42,7 @@ class CryptoScan(BackgroundTaskThread):
 
         if self.options['static']:
             self.log_progress('Commencing data constant scans...')
-            results.extend(self.run_data_constant_scans())
+            #results.extend(self.run_data_constant_scans())
 
             if not self.cancelled:
                 self.log_progress('Commencing IL constant scans...')
@@ -67,10 +67,35 @@ class CryptoScan(BackgroundTaskThread):
                                 'No crypto constructs identified.',
                                 bn.MessageBoxButtonSet.OKButtonSet,
                                 bn.MessageBoxIcon.InformationIcon)
-        self.finish()
 
     def run_il_constant_scans(self):
         results = []
+        const_instructions = []
+        scans = [scan for scan in self.scanconfigs if scan.type == 'static' and scan.enabled]
+
+        for instruction in self.bv.mlil_instructions:
+            const_instructions.extend(self.recurse_retrieve_consts(instruction))
+
+        for instr in const_instructions:
+            for scan in scans:
+                # Only check flag arrays that are of equal size to the instruction
+                # todo: what if we want to check a larger array across multiple constants? needed?
+                if len(scan.flags) == instr.size:
+                    flag_value = ''.join((flag.replace('0x', '') for flag in scan.flags))
+                    const_value = '{:x}'.format(instr.constant)
+                    if const_value == flag_value:
+                        results.append(ILConstantScanMatch(scan, instr))
+
+        return results
+
+    def recurse_retrieve_consts(self, instruction):
+        results = []
+        if instruction.operation == bn.MediumLevelILOperation.MLIL_CONST:
+            results.append(instruction)
+        else:
+            for operand in instruction.operands:
+                if type(operand) == bn.MediumLevelILInstruction:
+                    results.extend(self.recurse_retrieve_consts(operand))
         return results
 
     def run_data_constant_scans(self):
@@ -106,8 +131,6 @@ class CryptoScan(BackgroundTaskThread):
                 while progress_trigger < percentage:
                     progress_trigger += 5
                 self.log_progress('Scanning data for constants ({percentage}%)'.format(percentage = percentage))
-                # Whilst log_progress is ignored
-                self.log_info('Scanning data for constants ({percentage}%)'.format(percentage = percentage))
 
             if b is None:
                 break
@@ -140,7 +163,7 @@ class CryptoScan(BackgroundTaskThread):
                     if len(test_bytes) == flag_count and test_bytes == [int(tb, 16) for tb in scan.flags[1:]]:
                         # Save the match with the address
                         address = self.br.offset - (bytes_read+1)
-                        result = ScanMatch(scan, address)
+                        result = DataConstantScanMatch(scan, address)
                         results.append(result)
 
                     # Track back irrespective
@@ -160,7 +183,8 @@ class CryptoScan(BackgroundTaskThread):
 
     def apply_symbols(self, results):
         for result in results:
-            if result.scan.match_type == 'symbol':
+            # This only makes sense for data constants
+            if isinstance(result, DataConstantScanMatch) and result.scan.match_type == 'symbol':
                 self.set_symbol(result.address, result.scan.match_label)
 
     def set_symbol(self, address, label):
