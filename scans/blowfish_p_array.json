@@ -1,0 +1,15 @@
+{
+  "name" : "Blowfish_P_array",
+  "family" : "Blowfish",
+  "description" : "Detects Blowfish_P_array",
+  "type" : "static",
+  "size" : 4,
+  "flags" : [ "0x24", "0x3f", "0x6a", "0x88",
+              "0x85", "0xa3", "0x08", "0xd3",
+              "0x13", "0x19", "0x8a", "0x2e",
+              "0x03", "0x70", "0x73", "0x44" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Blowfish_P_array"
+  }
+}

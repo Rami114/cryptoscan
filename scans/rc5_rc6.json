@@ -1,0 +1,13 @@
+  {
+    "name" : "RC5_RC6",
+    "description" : "Detects Rivest RC5_RC6",
+    "family" : "Rivest",
+    "type" : "static",
+    "size" : 4,
+    "flags" : [ "0xb7", "0xe1", "0x51", "0x63",
+                "0x9e", "0x37", "0x79", "0xb9"],
+    "on_match" : {
+      "type" : "symbol",
+      "name" : "RC5_RC6"
+    }
+  }
