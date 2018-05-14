@@ -18,4 +18,8 @@ class ILConstantScanMatch(ScanMatch):
         ScanMatch.__init__(self, scan)
         self.instruction = instruction
         self.address = instruction.address
-        self.flag_chunk = flag_chunk
+        self.flag_chunks = []
+        self.add_matched_chunk(flag_chunk)
+
+    def add_matched_chunk(self, flag_chunk):
+        self.flag_chunks.extend(flag_chunk)

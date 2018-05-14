@@ -89,7 +89,17 @@ class CryptoScan(BackgroundTaskThread):
                         flag_value = ''.join((flag.replace('0x', '') for flag in chunk))
                         const_value = '{:x}'.format(instr.constant)
                         if const_value == flag_value:
-                            results.append(ILConstantScanMatch(scan, instr, chunk))
+                            # We found a hit, did we previously find a chunk from this scan?
+                            if scan.found:
+                                for index, result in enumerate(results):
+                                    if scan.name == result.scan.name and\
+                                                    result.instruction.function.source_function.name == \
+                                                    instr.function.source_function.name:
+                                        result.add_matched_chunk(list(chunk))
+                                        results[index] = result
+                            else:
+                                scan.found = True
+                                results.append(ILConstantScanMatch(scan, instr, chunk))
 
         return results
 

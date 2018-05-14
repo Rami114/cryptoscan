@@ -13,6 +13,8 @@ class ScanConfig:
         self.inverse_flags = self._calculate_inverse_flags()
         self.match_type = config['on_match']['type']
         self.match_label = config['on_match']['name']
+        # Primarily for chunked scan hits to be easily retrieved
+        self.found = False
 
     def _calculate_inverse_flags(self):
         if self.size == 1:
