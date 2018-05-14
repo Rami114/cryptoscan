@@ -56,6 +56,7 @@ class CryptoScan(BackgroundTaskThread):
         if self.cancelled:
             self.log_progress('Cancelling scan, checking for partial results...')
 
+        results = self.prune_results(results)
         if len(results) is not 0:
             self.log_progress('Scan found {count} match{plural}'.format(count = len(results),
                                                                     plural = '' if len(results) == 1 else 'es'))
@@ -217,6 +218,27 @@ class CryptoScan(BackgroundTaskThread):
                     self.br.offset -= bytes_read
 
         return results
+
+    def prune_results(self, results):
+        valid_results = []
+        for result in results:
+            if isinstance(result, ILConstantScanMatch):
+                max_match_len = len(result.scan.flags)
+                matched_len = len(result.flag_chunks)
+                match_rate =  (100*matched_len) / max_match_len
+                if match_rate >= result.scan.threshold:
+                    valid_results.append(result)
+                else:
+                    self.log_info("Scan {name} had match rate of {rate} vs threshold {threshold}".format(
+                        name = result.scan.name,
+                        rate = match_rate,
+                        threshold = result.scan.threshold
+                    ))
+            else:
+                # data constants are a straight pass
+                # we only chunk during IL scans
+                valid_results.append(result)
+        return valid_results
 
     def run_signature_scans(self):
         results = []

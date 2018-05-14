@@ -4,7 +4,7 @@ Plugin for [Binary Ninja](https://binary.ninja/) platform
 
 ## General
 This plugin scans binaries for common crypto constants and - in a future release - attempts to detect functions that appear to be cryptographic in nature.
-The constants are largely a port of the findcrypt IDA plugin constants. 
+The constants include a port of the findcrypt IDA plugin constants, some additonal AES constants and more will be added as they come up. 
 
 ## Features
 ### Overview
@@ -22,11 +22,14 @@ The plugin supports the following types of scans:
 If any matches are identified a Markdown (for GUI) or text (for CLI) report will be shown, listing which scans were matched, what family they belong to as well as the address in the binary.
 The aim of the report was to allow easy copy-pasting of the address for use with the 'Go to address...' function. 
 
+Whilst data matches only contain the address at which the constant is defined, IL matches will also indicate the function they were discovered in.
+
 ### Configuration
 Individual scan configurations are kept in the scans subfolder. The following fields are required in the JSON:
 
  - name: short name for the scan
- - description: long name or description, only for author's quality of life
+ - description: long name or description, only for author's quality of life 
+ - threshold: for multi-byte constants, minimum amount of n-sized chunks that must be found (e.g. when loading chunked in registers) 
  - type: static or signature (signatures are currently not implemented though)
  - flags: array of single byte strings, usually 4 bytes but no upper bound is set. You can now add null bytes. 
  - on_match: object with subfields
@@ -34,7 +37,7 @@ Individual scan configurations are kept in the scans subfolder. The following fi
    - name: name to give to the symbol
 
 ## TODO
-- [ ] Add more constants 
+- [x] Add more constants 
 - [ ] Flesh out how signature detection will work
 - [x] Make CryptoScan run in the background
 - [x] Deal with null bytes in the flags better

@@ -4,6 +4,7 @@ class ScanConfig:
 
     def __init__(self, config):
         self.name = config['name']
+        self.threshold = config['threshold']
         self.family = config['family']
         self.enabled = True  # Might be useful later if we let users individually en/disable scans
         self.description = config['description']
