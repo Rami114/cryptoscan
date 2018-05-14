@@ -3,6 +3,7 @@
   "family" : "AES",
   "description" : "Detects Rijndael_Td4",
   "type" : "static",
+  "size" : 4,
   "flags" : [ "0x52", "0x52", "0x52", "0x52", "0x09", "0x09", "0x09", "0x09" ],
   "on_match" : {
     "type" : "symbol",

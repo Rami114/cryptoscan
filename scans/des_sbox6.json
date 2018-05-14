@@ -3,6 +3,7 @@
   "description" : "Detects DES_sbox6",
   "family" : "DES",
   "type" : "static",
+  "size" : 1,
   "flags" : [ "0x0c", "0x01", "0x0a", "0x0f" ],
   "on_match" : {
     "type" : "symbol",

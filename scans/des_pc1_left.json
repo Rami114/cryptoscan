@@ -3,6 +3,7 @@
   "description" : "Detects DES_pc1_left (permuted choice 1 left)",
   "family" : "DES",
   "type" : "static",
+  "size" : 1,
   "flags" : [ "0x38", "0x30", "0x28", "0x20" ],
   "on_match" : {
     "type" : "symbol",
