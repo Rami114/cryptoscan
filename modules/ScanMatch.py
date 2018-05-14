@@ -14,7 +14,8 @@ class DataConstantScanMatch(ScanMatch):
 
 class ILConstantScanMatch(ScanMatch):
 
-    def __init__(self, scan, instruction):
+    def __init__(self, scan, instruction, flag_chunk):
         ScanMatch.__init__(self, scan)
         self.instruction = instruction
         self.address = instruction.address
+        self.flag_chunk = flag_chunk

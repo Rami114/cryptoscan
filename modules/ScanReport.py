@@ -42,7 +42,7 @@ class ScanReport:
                             'Address: {address}\nFunction: {function}\n'.format(
                     name = result.scan.name,
                     family = result.scan.family,
-                    flags = '-'.join(result.scan.flags[:4]),
+                    flags = '-'.join(result.flag_chunk),
                     address = hex(result.instruction.address).rstrip("L"),
                     function = result.instruction.function.source_function))
 
@@ -86,7 +86,7 @@ class ScanReport:
                 md.append('| {name} |\|| {family} |\|| `{flags}` |\|| `{address}` |\|| {function} |'.format(
                     name = result.scan.name,
                     family = result.scan.family,
-                    flags = '-'.join(result.scan.flags[:4]),
+                    flags = '-'.join(result.flag_chunk),
                     address = hex(result.instruction.address).rstrip("L"),
                     function = '{name} @ {address}'.format(
                         name = result.instruction.function.source_function.name,

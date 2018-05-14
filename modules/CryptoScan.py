@@ -77,14 +77,19 @@ class CryptoScan(BackgroundTaskThread):
             const_instructions.extend(self.recurse_retrieve_consts(instruction))
 
         for instr in const_instructions:
+            # Skip constants that aren't at least several bytes, or we will get tons of false positives
+            if not instr.size > 1:
+                continue
             for scan in scans:
-                # Only check flag arrays that are of equal size to the instruction
-                # todo: what if we want to check a larger array across multiple constants? needed?
-                if len(scan.flags) == instr.size:
-                    flag_value = ''.join((flag.replace('0x', '') for flag in scan.flags))
-                    const_value = '{:x}'.format(instr.constant)
-                    if const_value == flag_value:
-                        results.append(ILConstantScanMatch(scan, instr))
+                # Some constants are broken up across multiple instructions.
+                # This chunking will detect all of them
+                chunks = [scan.flags[i * instr.size:(i+1) * instr.size] for i in range((len(scan.flags) + 3) // 4)]
+                for chunk in chunks:
+                    if len(chunk) == instr.size:
+                        flag_value = ''.join((flag.replace('0x', '') for flag in chunk))
+                        const_value = '{:x}'.format(instr.constant)
+                        if const_value == flag_value:
+                            results.append(ILConstantScanMatch(scan, instr, chunk))
 
         return results
 
