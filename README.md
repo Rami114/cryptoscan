@@ -26,9 +26,11 @@ The following constants are defined in scan configurations:
  - Blowfish: p_array and sbox
  - CRC32: lzma tables 0-7, m_tab_le and m_tab_be, ms_table0-6
  - DES: p32i, pc1_left, pc1_right, pc2, sbox1-8
+ - DFC: sbox
  - IKE: modp group shared component
  - KASUMI: key expansion mod, sbox_s7, sbox_s9
  - MD5: initstate and md5_t
+ - NewDES: sbox
  - RC5/RC6: combined constant
  - SHA1: h
  - SHA224: h
