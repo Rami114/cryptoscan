@@ -18,7 +18,24 @@ The plugin supports the following types of scans:
  - Scanning for constants in the IL 
  - Scanning for crypto signatures based on function behaviour (WIP) 
 
-### Report
+### Supported cryptography
+
+The following constants are defined in scan configurations:
+
+ - AES: sboxes, td0-4, te0-4
+ - Blowfish: p_array and sbox
+ - CRC32: lzma tables 0-7, m_tab_le and m_tab_be, ms_table0-6
+ - DES: p32i, pc1_left, pc1_right, pc2, sbox1-8
+ - MD5: initstate and md5_t
+ - RC5/RC6 (single constant)
+ - SHA1 (single constant)
+ - SHA224 (single constant)
+ - SHA256: both k and h 
+ - SHA512 (single constant)
+ - TEA (single constant)
+ - Zlib: distance_starts, distance_extrabits, length_starts, length_extrabits
+
+### Reporting
 If any matches are identified a Markdown (for GUI) or text (for CLI) report will be shown, listing which scans were matched, what family they belong to as well as the address in the binary.
 The aim of the report was to allow easy copy-pasting of the address for use with the 'Go to address...' function. 
 
