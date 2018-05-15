@@ -29,6 +29,8 @@ class CryptoScan(BackgroundTaskThread):
                 json_config = json.load(json_file)
                 if all(option in json_config for option in ['name',
                                                             'description',
+                                                            'size',
+                                                            'threshold',
                                                             'type',
                                                             'flags',
                                                             'on_match']):
@@ -252,9 +254,7 @@ class CryptoScan(BackgroundTaskThread):
 
     def apply_symbols(self, results):
         for result in results:
-            # This only makes sense for data constants
-            if isinstance(result, DataConstantScanMatch) and result.scan.match_type == 'symbol':
-                self.set_symbol(result.address, result.scan.match_label)
+            self.set_symbol(result.address, result.scan.match_label)
 
     def set_symbol(self, address, label):
         if self.bv.is_valid_offset(address):
