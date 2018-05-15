@@ -1,13 +1,14 @@
 {
-  "threshold" : 50,
-  "name" : "Rijndael_Td4",
-  "family" : "AES",
-  "description" : "Detects Rijndael_Td4",
+  "threshold" : 100,
+  "name" : "TEA_delta",
+  "family" : "TEA",
+  "description" : "Detects the golden-ratio based delta constant used in TEA",
   "type" : "static",
   "size" : 4,
-  "flags" : [ "0x52", "0x52", "0x52", "0x52", "0x09", "0x09", "0x09", "0x09" ],
+  "flags" : [ "0x9e", "0x37", "0x79", "0xb9" ],
   "on_match" : {
+	"threshold" : 50,
     "type" : "symbol",
-    "name" : "Rijndael_Td4"
+    "name" : "TEA_delta"
   }
 }

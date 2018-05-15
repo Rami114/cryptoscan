@@ -1,0 +1,18 @@
+{
+  "threshold" : 50,
+  "name" : "Kasumi_sbox_s9",
+  "family" : "KASUMI",
+  "description" : "Detects Kasumi_sbox_s9",
+  "type" : "static",
+  "size" : 4,
+  "flags" : [ "0xa7", "0xef", "0xa1", "0x7b",
+              "0x87", "0x4e", "0x09", "0x52",
+              "0x26", "0xe2", "0x30", "0x66",
+              "0xc4", "0x81", "0x5a", "0x8d",
+              "0xb7", "0xfd", "0x93", "0x4b",
+              "0x9f", "0x54", "0x33", "0x6a" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Kasumi_sbox_s9"
+  }
+}

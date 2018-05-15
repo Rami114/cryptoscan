@@ -1,0 +1,16 @@
+{
+  "threshold" : 60,
+  "name" : "Kasumi_mod",
+  "family" : "KASUMI",
+  "description" : "Detects the key expansion constant used in Kasumi",
+  "type" : "static",
+  "size" : 4,
+  "flags" : [ "0x01", "0x23", "0x45", "0x67",
+              "0x89", "0xab", "0xcd", "0xef",
+              "0xfe", "0xdc", "0xba", "0x98",
+              "0x76", "0x54", "0x32", "0x10" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Kasumi_mod"
+  }
+}
