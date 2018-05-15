@@ -1,0 +1,17 @@
+{
+  "threshold" : 50,
+  "name" : "SM4_fk",
+  "description" : "Detects SM4_fk",
+  "family" : "SM4",
+  "type" : "static",
+  "size" : 1,
+  "flags" : [ "0xa3", "0xb1", "0xba", "0xc6",
+              "0x56", "0xaa", "0x33", "0x50",
+              "0x67", "0x7d", "0x91", "0x97",
+              "0xb2", "0x70", "0x22", "0xdc" ],
+  "on_match" : {
+	"threshold" : 50,
+    "type" : "symbol",
+    "name" : "SM4_fk"
+  }
+}
