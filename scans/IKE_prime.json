@@ -1,5 +1,5 @@
 {
-  "threshold" : 100,
+  "threshold" : 80,
   "name" : "IKE_prime",
   "family" : "IKE",
   "description" : "Internet Key Exchange, shared modular expansion prime",
