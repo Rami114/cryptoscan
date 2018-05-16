@@ -43,11 +43,11 @@ class CryptoScan(BackgroundTaskThread):
         results = []
 
         if self.options['static']:
-            self.log_progress('Commencing data constant scans...')
+            self.log_progress('Running data constant scans...')
             results.extend(self.run_data_constant_scans())
 
             if not self.cancelled:
-                self.log_progress('Commencing IL constant scans...')
+                self.log_progress('Running IL constant scans...')
                 results.extend(self.run_il_constant_scans())
 
         if self.options['signature'] and not self.cancelled:
@@ -76,10 +76,30 @@ class CryptoScan(BackgroundTaskThread):
         const_instructions = []
         scans = [scan for scan in self.scanconfigs if scan.type == 'static' and scan.enabled]
 
-        for instruction in self.bv.mlil_instructions:
+        # Because of potential deep trees this isn't a true reflection of progress
+        progress_trigger = 5
+        num_instructions = len(list(self.bv.mlil_instructions))
+        self.log_progress('Finding constants defined in IL')
+        for instr_index, instruction in enumerate(self.bv.mlil_instructions):
+            percentage = instr_index*100 / num_instructions
+            if percentage >= progress_trigger:
+                progress_trigger += 5
+                while progress_trigger < percentage:
+                    progress_trigger += 5
+                self.log_progress('Finding constants defined in IL ({percentage}%)'.format(percentage = percentage))
             const_instructions.extend(self.recurse_retrieve_consts(instruction))
 
-        for instr in const_instructions:
+        # Second pass, actually evaluate the found constants
+        self.log_progress('Evaluating found IL constants')
+        progress_trigger = 5
+        num_consts = len(const_instructions)
+        for const_index, instr in enumerate(const_instructions):
+            percentage = const_index*100 / num_consts
+            if percentage >= progress_trigger:
+                progress_trigger += 5
+                while progress_trigger < percentage:
+                    progress_trigger += 5
+                self.log_progress('Evaluating found IL constants ({percentage}%)'.format(percentage = percentage))
             # Skip constants that aren't at least several bytes, or we will get tons of false positives
             if not instr.size > 1:
                 continue
@@ -87,7 +107,7 @@ class CryptoScan(BackgroundTaskThread):
                 # Some constants are broken up across multiple instructions.
                 # This chunking will detect all of them
                 chunks = [scan.flags[i * instr.size:(i+1) * instr.size] for i in range((len(scan.flags) + 3) // 4)]
-                for chunk in chunks:
+                for chunk_index, chunk in enumerate(chunks):
                     if len(chunk) == instr.size:
                         flag_value = ''.join((flag.replace('0x', '') for flag in chunk))
                         const_value = '{:x}'.format(instr.constant)
@@ -95,10 +115,11 @@ class CryptoScan(BackgroundTaskThread):
                             # We found a hit, did we previously find a chunk from this scan?
                             if scan.found:
                                 for index, result in enumerate(results):
-                                    if scan.name == result.scan.name and\
+                                    if scan.name == result.scan.name and \
                                                     result.instruction.function.source_function.name == \
-                                                    instr.function.source_function.name:
-                                        result.add_matched_chunk(list(chunk))
+                                                    instr.function.source_function.name and \
+                                        not result.found_chunk_id(chunk_index):
+                                        result.add_matched_chunk(list(chunk), chunk_index)
                                         results[index] = result
                             else:
                                 scan.found = True
