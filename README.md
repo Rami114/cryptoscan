@@ -21,7 +21,8 @@ The plugin supports the following types of scans:
 The following constants are defined in scan configurations:
 
  - AES: sboxes, td0-4, te0-4
- - ARIA: sbox2, sbox4 (1 and 3 are equal to Rijndael) 
+ - ARIA: sbox2, sbox4 (1 and 3 are equal to Rijndael)
+ - BLAKE: 224, 256, 384 and 512 inits 
  - Blowfish: p_array and sbox
  - CRC32: lzma tables 0-7, m_tab_le and m_tab_be, ms_table0-6
  - DES: p32i, pc1_left, pc1_right, pc2, sbox1-8
