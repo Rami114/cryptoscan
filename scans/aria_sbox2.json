@@ -1,0 +1,16 @@
+{
+  "threshold" : 50,
+  "name" : "Aria_sbox2",
+  "family" : "ARIA",
+  "description" : "Detects the presence of ARIA\'s secondary sbox",
+  "type" : "static",
+  "size" : 1,
+  "flags" : [ "0xe2", "0x4e", "0x54", "0xfc",
+              "0x94", "0xc2", "0x4a", "0xcc",
+              "0x62", "0x0d", "0x6a", "0x46",
+              "0x3c", "0x4d", "0x8b", "0xd1" ],
+  "on_match" : {
+    "type" : "symbol",
+    "name" : "Aria_sbox2"
+  }
+}

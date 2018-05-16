@@ -21,6 +21,7 @@ The plugin supports the following types of scans:
 The following constants are defined in scan configurations:
 
  - AES: sboxes, td0-4, te0-4
+ - ARIA: sbox2, sbox4 (1 and 3 are equal to Rijndael) 
  - Blowfish: p_array and sbox
  - CRC32: lzma tables 0-7, m_tab_le and m_tab_be, ms_table0-6
  - DES: p32i, pc1_left, pc1_right, pc2, sbox1-8
@@ -59,8 +60,7 @@ Individual scan configurations are kept in the scans subfolder. The following fi
 
 ## TODO
 - [x] Add more constants 
-- [ ] Flesh out how signature detection will work
 - [x] Make CryptoScan run in the background
 - [x] Deal with null bytes in the flags better
-- [ ] Detect cryptocurrencies
-
+- [ ] Flesh out how signature detection will work
+- [ ] Refactor data scanning to improve speed on very large binaries 
