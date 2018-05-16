@@ -16,7 +16,6 @@ The plugin supports the following types of scans:
 
  - Scanning for constants in data 
  - Scanning for constants in the IL 
- - Scanning for crypto signatures based on function behaviour (WIP) 
 
 ### Supported cryptography
 
