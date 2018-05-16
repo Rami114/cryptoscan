@@ -3,8 +3,7 @@ BinaryNinja CryptoScan
 Plugin for [Binary Ninja](https://binary.ninja/) platform
 
 ## General
-This plugin scans binaries for common crypto constants and - in a future release - attempts to detect functions that appear to be cryptographic in nature.
-The constants include a port of the findcrypt IDA plugin constants, some additonal AES constants and more will be added as they come up. 
+This Binja plugin is effectively trying to replicate [findcrypt](https://github.com/you0708/ida/tree/master/idapython_tools/findcrypt) functionality. It supports a larger range of constants.
 
 ## Features
 ### Overview
