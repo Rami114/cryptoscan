@@ -1,0 +1,18 @@
+{
+  "threshold" : 50,
+  "name" : "EC_p256",
+  "description" : "Detects the P-256 curve",
+  "family" : "EC",
+  "type" : "static",
+  "size" : 4,
+  "flags" : [ "0xc4", "0x9d", "0x36", "0x08",
+              "0x86", "0xe7", "0x04", "0x93",
+              "0x6a", "0x66", "0x78", "0xe1",
+              "0x13", "0x9d", "0x26", "0xb7",
+              "0x81", "0x9f", "0x7e", "0x90" ],
+  "on_match" : {
+	"threshold" : 50,
+    "type" : "symbol",
+    "name" : "EC_p256"
+  }
+}

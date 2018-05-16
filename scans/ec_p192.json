@@ -1,0 +1,18 @@
+{
+  "threshold" : 50,
+  "name" : "EC_p192",
+  "description" : "Detects the P-192 curve",
+  "family" : "EC",
+  "type" : "static",
+  "size" : 4,
+  "flags" : [ "0x30", "0x45", "0xae", "0x6f",
+              "0xc8", "0x42", "0x2f", "0x64",
+              "0xed", "0x57", "0x95", "0x28",
+              "0xd3", "0x81", "0x20", "0xea",
+              "0xe1", "0x21", "0x96", "0xd5" ],
+  "on_match" : {
+	"threshold" : 50,
+    "type" : "symbol",
+    "name" : "EC_p224"
+  }
+}
