@@ -36,6 +36,7 @@ The following constants are defined in scan configurations:
  - SHA224: h
  - SHA256: both k and h 
  - SHA512: h
+ - SM3: init
  - SM4: sbox, ck and fk
  - TEA: delta
  - Zlib: distance_starts, distance_extrabits, length_starts, length_extrabits
