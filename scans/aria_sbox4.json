@@ -2,7 +2,7 @@
   "threshold" : 50,
   "name" : "Aria_sbox4",
   "family" : "ARIA",
-  "description" : "Detects the presence of ARIA\'s secondary inverse sbox",
+  "description" : "Detects the presence of ARIA's secondary inverse sbox",
   "type" : "static",
   "size" : 1,
   "flags" : [ "0x30", "0x68", "0x99", "0x1b",

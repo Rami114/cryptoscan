@@ -2,7 +2,7 @@
   "threshold" : 50,
   "name" : "Aria_sbox2",
   "family" : "ARIA",
-  "description" : "Detects the presence of ARIA\'s secondary sbox",
+  "description" : "Detects the presence of ARIA's secondary sbox",
   "type" : "static",
   "size" : 1,
   "flags" : [ "0xe2", "0x4e", "0x54", "0xfc",

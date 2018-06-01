@@ -71,6 +71,7 @@ class CryptoScan(BackgroundTaskThread):
                                 bn.MessageBoxButtonSet.OKButtonSet,
                                 bn.MessageBoxIcon.InformationIcon)
 
+    # Todo: move to dedicated class for scanners
     def run_il_constant_scans(self):
         results = []
         const_instructions = []
@@ -137,6 +138,7 @@ class CryptoScan(BackgroundTaskThread):
                     results.extend(self.recurse_retrieve_consts(operand))
         return results
 
+    # Todo: move to dedicated class for scanners
     def run_data_constant_scans(self):
         results = []
 
