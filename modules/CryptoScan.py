@@ -175,7 +175,8 @@ class CryptoScan(BackgroundTaskThread):
 
             for index, trigger in enumerate(triggers):
                 if debug:
-                    self.log_info('Checking trigger {} for scan {} against byte {}'.format(trigger, scans[index].name, hex(b)))
+                    self.log_info('Checking trigger {} for scan {} against byte {}'.format(trigger,
+                                                                                           scans[index].name, hex(b)))
                 # TODO: refactor this, null-byte triggers will chew up an inordinate amount of time
                 # Possible solutions include caching temporarily when hits are detected, grouping triggers
                 # and terminating early if we check flag bytes 1 by 1
@@ -213,11 +214,13 @@ class CryptoScan(BackgroundTaskThread):
             # And reverse byte order
             for index, trigger in enumerate(inverse_triggers):
                 if debug:
-                    self.log_info('Checking inverse trigger {} for scan {} against byte {}'.format(trigger, multi_byte_scans[index].name, hex(b)))
+                    self.log_info('Checking inverse trigger {} for scan {} against byte {}'
+                                  .format(trigger, multi_byte_scans[index].name, hex(b)))
                 if b == int(trigger, 16):
 
                     if debug:
-                        self.log_info('Inverse trigger match at debug address for scan {}'.format(multi_byte_scans[index].name))
+                        self.log_info('Inverse trigger match at debug address for scan {}'
+                                      .format(multi_byte_scans[index].name))
 
                     scan = multi_byte_scans[index]
                     # See how many more values we need
