@@ -1,9 +1,9 @@
 import binaryninja as bn
 from binaryninja.plugin import BackgroundTaskThread
-import os, json
-from ScanConfig import ScanConfig
-from ScanMatch import DataConstantScanMatch, ILConstantScanMatch
-from ScanReport import ScanReport
+import os, json, binascii
+from cryptoscan.modules.ScanConfig import ScanConfig
+from cryptoscan.modules.ScanMatch import DataConstantScanMatch, ILConstantScanMatch
+from cryptoscan.modules.ScanReport import ScanReport
 
 
 class CryptoScan(BackgroundTaskThread):
@@ -308,7 +308,7 @@ class CryptoScan(BackgroundTaskThread):
             if byte is None:
                 self.br.seek_relative(1)
                 continue
-            byte = int(byte.encode('hex'), 16)
+            byte = int(binascii.hexlify(byte), 16)
             if byte != 0 or allow_null:
                 return byte, dist
         return None, dist
@@ -319,7 +319,7 @@ class CryptoScan(BackgroundTaskThread):
         if self.br.eof:
             return None
         byte = self.br.read(1)
-        return int(byte.encode('hex'), 16)
+        return int(binascii.hexlify(byte), 16)
 
     def log_progress(self, msg):
         self.progress = '[CryptoScan] {message}'.format(message = msg)
