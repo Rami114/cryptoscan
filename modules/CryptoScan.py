@@ -87,7 +87,7 @@ class CryptoScan(BackgroundTaskThread):
                 progress_trigger += 5
                 while progress_trigger < percentage:
                     progress_trigger += 5
-                self.log_progress('Finding constants defined in IL ({percentage}%)'.format(percentage = percentage))
+                self.log_progress('Finding constants defined in IL ({percentage:.3f}%)'.format(percentage = percentage))
             const_instructions.extend(self.recurse_retrieve_consts(instruction))
 
         # Second pass, actually evaluate the found constants
@@ -100,7 +100,7 @@ class CryptoScan(BackgroundTaskThread):
                 progress_trigger += 5
                 while progress_trigger < percentage:
                     progress_trigger += 5
-                self.log_progress('Evaluating found IL constants ({percentage}%)'.format(percentage = percentage))
+                self.log_progress('Evaluating found IL constants ({percentage:.3f}%)'.format(percentage = percentage))
             # Skip constants that aren't at least several bytes, or we will get tons of false positives
             if not instr.size > 1:
                 continue
@@ -168,7 +168,7 @@ class CryptoScan(BackgroundTaskThread):
                 progress_trigger += 5
                 while progress_trigger < percentage:
                     progress_trigger += 5
-                self.log_progress('Scanning data for constants ({percentage}%)'.format(percentage = percentage))
+                self.log_progress('Scanning data for constants ({percentage:.3f}%)'.format(percentage = percentage))
 
             if b is None:
                 break
@@ -260,7 +260,7 @@ class CryptoScan(BackgroundTaskThread):
                 if match_rate >= result.scan.threshold:
                     valid_results.append(result)
                 else:
-                    self.log_info("Scan {name} had match rate of {rate} vs threshold {threshold}".format(
+                    self.log_info("Scan {name} had match rate of {rate:.3f} vs threshold {threshold:.3f}".format(
                         name = result.scan.name,
                         rate = match_rate,
                         threshold = result.scan.threshold
@@ -278,8 +278,8 @@ class CryptoScan(BackgroundTaskThread):
         return results
 
     def display_results(self, results):
-        report = ScanReport(results, self.cancelled)
-        bn.show_markdown_report(report.title, report.markdown_report, report.text_report)
+        report = ScanReport(results, self.cancelled, self.bv.file.filename)
+        self.bv.show_markdown_report(report.title, report.markdown_report, report.text_report)
 
     def apply_symbols(self, results):
         for result in results:
