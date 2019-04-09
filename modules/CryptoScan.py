@@ -46,9 +46,9 @@ class CryptoScan(BackgroundTaskThread):
             self.log_progress('Running data constant scans...')
             results.extend(self.run_data_constant_scans())
 
-            if not self.cancelled:
-                self.log_progress('Running IL constant scans...')
-                results.extend(self.run_il_constant_scans())
+        if self.options['il'] and not self.cancelled:
+            self.log_progress('Running IL constant scans...')
+            results.extend(self.run_il_constant_scans())
 
         if self.options['signature'] and not self.cancelled:
             self.log_progress('Running signature scans')
@@ -66,10 +66,11 @@ class CryptoScan(BackgroundTaskThread):
             self.display_results(results)
         elif not self.cancelled:
             self.log_progress('No scan results found')
-            bn.show_message_box('CryptoScan results',
-                                'No crypto constructs identified.',
-                                bn.MessageBoxButtonSet.OKButtonSet,
-                                bn.MessageBoxIcon.InformationIcon)
+            # Temporarily disabled pending better way to not block multiple command-line output
+            #bn.show_message_box('CryptoScan results',
+            #                    'No crypto constructs identified.',
+            #                    bn.MessageBoxButtonSet.OKButtonSet,
+            #                    bn.MessageBoxIcon.InformationIcon)
 
     # Todo: move to dedicated class for scanners
     def run_il_constant_scans(self):
@@ -278,7 +279,7 @@ class CryptoScan(BackgroundTaskThread):
         return results
 
     def display_results(self, results):
-        report = ScanReport(results, self.cancelled, self.bv.file.filename)
+        report = ScanReport(results, self.cancelled)
         self.bv.show_markdown_report(report.title, report.markdown_report, report.text_report)
 
     def apply_symbols(self, results):

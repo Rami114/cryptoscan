@@ -2,9 +2,8 @@ from cryptoscan.modules.ScanMatch import ILConstantScanMatch, DataConstantScanMa
 
 class ScanReport:
 
-    def __init__(self, raw_results, was_cancelled, view_name):
+    def __init__(self, raw_results, was_cancelled):
         self.raw_results = raw_results
-        self.view_name = view_name
         self.title = '{prefix}CryptoScan report - found {count} match{plural}'.format(
             count = len(raw_results),
             prefix = 'Partial ' if was_cancelled else '',
@@ -72,7 +71,6 @@ class ScanReport:
             for result in data_results:
                 md.append('| {name} |\|| {family} |\|| `{flags}` |\|| [{address}](binaryninja://?expr={address}) |'.format(
                     name = result.scan.name,
-                    view_name = self.view_name,
                     family = result.scan.family,
                     flags = '-'.join(result.scan.flags[:4]),
                     address = hex(result.address).rstrip('L')))
@@ -89,7 +87,6 @@ class ScanReport:
             for result in il_results:
                 md.append('| {name} |\|| {family} |\|| `{flags}` |\|| [{address}](binaryninja://?expr={address}) |\|| {function} |'.format(
                     name = result.scan.name,
-                    view_name = self.view_name,
                     family = result.scan.family,
                     flags = '{flags} {summary}'.format(flags = '-'.join(result.flag_chunks[:4]),
                                                        summary = ' + {count} more'.format(
