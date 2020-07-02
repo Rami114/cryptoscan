@@ -69,7 +69,7 @@ class ScanReport:
             md.append('|:----------------- | --- |:-------:| --- |:-----:|     | -------:|')
 
             for result in data_results:
-                md.append('| {name} |\|| {family} |\|| `{flags}` |\|| `{address}` |'.format(
+                md.append('| {name} |\|| {family} |\|| `{flags}` |\|| [{address}](binaryninja://?expr={address}) |'.format(
                     name = result.scan.name,
                     family = result.scan.family,
                     flags = '-'.join(result.scan.flags[:4]),
@@ -85,7 +85,7 @@ class ScanReport:
             md.append('|:----------------- | --- |:-------:| --- |:-----:|     | -------:|    |:--------:|')
 
             for result in il_results:
-                md.append('| {name} |\|| {family} |\|| `{flags}` |\|| `{address}` |\|| {function} |'.format(
+                md.append('| {name} |\|| {family} |\|| `{flags}` |\|| [{address}](binaryninja://?expr={address}) |\|| {function} |'.format(
                     name = result.scan.name,
                     family = result.scan.family,
                     flags = '{flags} {summary}'.format(flags = '-'.join(result.flag_chunks[:4]),
