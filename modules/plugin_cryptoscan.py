@@ -1,5 +1,5 @@
 import binaryninja as bn
-from cryptoscan.modules.CryptoScan import CryptoScan
+from .CryptoScan import CryptoScan
 
 def run_plugin(bv):
     # Just run everything until we have something tangible for IL signature detection

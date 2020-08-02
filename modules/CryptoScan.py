@@ -1,9 +1,9 @@
 import binaryninja as bn
 from binaryninja.plugin import BackgroundTaskThread
 import os, json, binascii
-from cryptoscan.modules.ScanConfig import ScanConfig
-from cryptoscan.modules.ScanMatch import DataConstantScanMatch, ILConstantScanMatch
-from cryptoscan.modules.ScanReport import ScanReport
+from .ScanConfig import ScanConfig
+from .ScanMatch import DataConstantScanMatch, ILConstantScanMatch
+from .ScanReport import ScanReport
 
 
 class CryptoScan(BackgroundTaskThread):
@@ -59,7 +59,7 @@ class CryptoScan(BackgroundTaskThread):
             self.log_progress('Cancelling scan, checking for partial results...')
 
         results = self.prune_results(results)
-        if len(results) is not 0:
+        if len(results) != 0:
             self.log_progress('Scan found {count} match{plural}'.format(count = len(results),
                                                                     plural = '' if len(results) == 1 else 'es'))
             self.apply_symbols(results)
