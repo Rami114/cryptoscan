@@ -1,5 +1,5 @@
 from binaryninja import BinaryViewType
-from cryptoscan.modules.CryptoScan import CryptoScan
+from modules.CryptoScan import CryptoScan
 import sys
 
 import argparse

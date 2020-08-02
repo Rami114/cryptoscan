@@ -1,4 +1,4 @@
-from cryptoscan.modules.ScanMatch import ILConstantScanMatch, DataConstantScanMatch
+from .ScanMatch import ILConstantScanMatch, DataConstantScanMatch
 
 class ScanReport:
 
