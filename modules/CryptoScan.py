@@ -46,9 +46,9 @@ class CryptoScan(BackgroundTaskThread):
             self.log_progress('Running data constant scans...')
             results.extend(self.run_data_constant_scans())
 
-            if not self.cancelled:
-                self.log_progress('Running IL constant scans...')
-                results.extend(self.run_il_constant_scans())
+        if self.options['il'] and not self.cancelled:
+            self.log_progress('Running IL constant scans...')
+            results.extend(self.run_il_constant_scans())
 
         if self.options['signature'] and not self.cancelled:
             self.log_progress('Running signature scans')
@@ -66,10 +66,11 @@ class CryptoScan(BackgroundTaskThread):
             self.display_results(results)
         elif not self.cancelled:
             self.log_progress('No scan results found')
-            bn.show_message_box('CryptoScan results',
-                                'No crypto constructs identified.',
-                                bn.MessageBoxButtonSet.OKButtonSet,
-                                bn.MessageBoxIcon.InformationIcon)
+            # Temporarily disabled pending better way to not block multiple command-line output
+            #bn.show_message_box('CryptoScan results',
+            #                    'No crypto constructs identified.',
+            #                    bn.MessageBoxButtonSet.OKButtonSet,
+            #                    bn.MessageBoxIcon.InformationIcon)
 
     # Todo: move to dedicated class for scanners
     def run_il_constant_scans(self):
@@ -87,7 +88,7 @@ class CryptoScan(BackgroundTaskThread):
                 progress_trigger += 5
                 while progress_trigger < percentage:
                     progress_trigger += 5
-                self.log_progress('Finding constants defined in IL ({percentage}%)'.format(percentage = percentage))
+                self.log_progress('Finding constants defined in IL ({percentage:.3f}%)'.format(percentage = percentage))
             const_instructions.extend(self.recurse_retrieve_consts(instruction))
 
         # Second pass, actually evaluate the found constants
@@ -100,7 +101,7 @@ class CryptoScan(BackgroundTaskThread):
                 progress_trigger += 5
                 while progress_trigger < percentage:
                     progress_trigger += 5
-                self.log_progress('Evaluating found IL constants ({percentage}%)'.format(percentage = percentage))
+                self.log_progress('Evaluating found IL constants ({percentage:.3f}%)'.format(percentage = percentage))
             # Skip constants that aren't at least several bytes, or we will get tons of false positives
             if not instr.size > 1:
                 continue
@@ -168,14 +169,15 @@ class CryptoScan(BackgroundTaskThread):
                 progress_trigger += 5
                 while progress_trigger < percentage:
                     progress_trigger += 5
-                self.log_progress('Scanning data for constants ({percentage}%)'.format(percentage = percentage))
+                self.log_progress('Scanning data for constants ({percentage:.3f}%)'.format(percentage = percentage))
 
             if b is None:
                 break
 
             for index, trigger in enumerate(triggers):
                 if debug:
-                    self.log_info('Checking trigger {} for scan {} against byte {}'.format(trigger, scans[index].name, hex(b)))
+                    self.log_info('Checking trigger {} for scan {} against byte {}'.format(trigger,
+                                                                                           scans[index].name, hex(b)))
                 # TODO: refactor this, null-byte triggers will chew up an inordinate amount of time
                 # Possible solutions include caching temporarily when hits are detected, grouping triggers
                 # and terminating early if we check flag bytes 1 by 1
@@ -213,11 +215,13 @@ class CryptoScan(BackgroundTaskThread):
             # And reverse byte order
             for index, trigger in enumerate(inverse_triggers):
                 if debug:
-                    self.log_info('Checking inverse trigger {} for scan {} against byte {}'.format(trigger, multi_byte_scans[index].name, hex(b)))
+                    self.log_info('Checking inverse trigger {} for scan {} against byte {}'
+                                  .format(trigger, multi_byte_scans[index].name, hex(b)))
                 if b == int(trigger, 16):
 
                     if debug:
-                        self.log_info('Inverse trigger match at debug address for scan {}'.format(multi_byte_scans[index].name))
+                        self.log_info('Inverse trigger match at debug address for scan {}'
+                                      .format(multi_byte_scans[index].name))
 
                     scan = multi_byte_scans[index]
                     # See how many more values we need
@@ -257,7 +261,7 @@ class CryptoScan(BackgroundTaskThread):
                 if match_rate >= result.scan.threshold:
                     valid_results.append(result)
                 else:
-                    self.log_info("Scan {name} had match rate of {rate} vs threshold {threshold}".format(
+                    self.log_info("Scan {name} had match rate of {rate:.3f} vs threshold {threshold:.3f}".format(
                         name = result.scan.name,
                         rate = match_rate,
                         threshold = result.scan.threshold
@@ -276,7 +280,7 @@ class CryptoScan(BackgroundTaskThread):
 
     def display_results(self, results):
         report = ScanReport(results, self.cancelled)
-        bn.show_markdown_report(report.title, report.markdown_report, report.text_report)
+        self.bv.show_markdown_report(report.title, report.markdown_report, report.text_report)
 
     def apply_symbols(self, results):
         for result in results:
