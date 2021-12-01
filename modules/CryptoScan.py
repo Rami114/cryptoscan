@@ -63,6 +63,7 @@ class CryptoScan(BackgroundTaskThread):
             self.log_progress('Scan found {count} match{plural}'.format(count = len(results),
                                                                     plural = '' if len(results) == 1 else 'es'))
             self.apply_symbols(results)
+            self.apply_tags(results)
             self.display_results(results)
         elif not self.cancelled:
             self.log_progress('No scan results found')
@@ -281,6 +282,14 @@ class CryptoScan(BackgroundTaskThread):
     def display_results(self, results):
         report = ScanReport(results, self.cancelled)
         self.bv.show_markdown_report(report.title, report.markdown_report, report.text_report)
+
+    def apply_tags(self, results):
+        tag_types = {}
+        for result in results:
+            family = result.scan.family
+            if family not in tag_types:
+                tag_types[family] = self.bv.create_tag_type(family, "📈")
+            self.bv.create_user_data_tag(result.address, tag_types[family], result.scan.name)
 
     def apply_symbols(self, results):
         for result in results:
