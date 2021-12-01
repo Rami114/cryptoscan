@@ -65,11 +65,11 @@ class ScanReport:
         if len(data_results) != 0:
             md.append('## Data Constants')
             md.append('')
-            md.append('| Name              |  \| | Family  |  \| | Flags |  \| | Address |')
-            md.append('|:----------------- | --- |:-------:| --- |:-----:|     | -------:|')
+            md.append('| Name | Family | Flags | Address |')
+            md.append('|:-----| ------ |:-----:| ------- |')
 
             for result in data_results:
-                md.append('| {name} |\|| {family} |\|| `{flags}` |\|| [{address}](binaryninja://?expr={address}) |'.format(
+                md.append('| {name} | {family} | `{flags}` | [{address}](binaryninja://?expr={address}) |'.format(
                     name = result.scan.name,
                     family = result.scan.family,
                     flags = '-'.join(result.scan.flags[:4]),
@@ -81,11 +81,11 @@ class ScanReport:
         if len(il_results) != 0:
             md.append('## IL Constants')
             md.append('')
-            md.append('| Name              |  \| | Family  |  \| | Flags |  \| | Address | \| | Function |')
-            md.append('|:----------------- | --- |:-------:| --- |:-----:|     | -------:|    |:--------:|')
+            md.append('| Name | Family | Flags | Address | Function |')
+            md.append('|:---- | ------ |:-----:| ------- |:--------:|')
 
             for result in il_results:
-                md.append('| {name} |\|| {family} |\|| `{flags}` |\|| [{address}](binaryninja://?expr={address}) |\|| {function} |'.format(
+                md.append('| {name} | {family} | `{flags}` | [{address}](binaryninja://?expr={address}) | {function} |'.format(
                     name = result.scan.name,
                     family = result.scan.family,
                     flags = '{flags} {summary}'.format(flags = '-'.join(result.flag_chunks[:4]),
