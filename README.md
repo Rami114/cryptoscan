@@ -33,6 +33,7 @@ The following constants are defined in scan configurations:
  - MD5: initstate and md5_t
  - NewDES: sbox
  - RC5/RC6: combined constant
+ - Salsa20: sigma and tau
  - SHA1: h
  - SHA224: h
  - SHA256: both k and h 
