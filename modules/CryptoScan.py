@@ -288,8 +288,8 @@ class CryptoScan(BackgroundTaskThread):
         for result in results:
             family = result.scan.family
             if family not in tag_types:
-                tag_types[family] = self.bv.create_tag_type(family, "📈")
-            self.bv.create_user_data_tag(result.address, tag_types[family], result.scan.name)
+                tag_types[family] = self.bv.create_tag_type(family, "🔐")
+            self.bv.add_tag(result.address, family, result.scan.name)
 
     def apply_symbols(self, results):
         for result in results:
