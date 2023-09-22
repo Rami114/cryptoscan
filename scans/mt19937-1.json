@@ -1,0 +1,14 @@
+{
+	"threshold" : 50,
+  "name" : "MT19937-1",
+  "description" : "Detects Mersenne Twister 19937",
+  "family" : "PRNG",
+  "size" : 1,
+  "type" : "static",
+  "flags" : [ "0xdf", "0xb0", "0x08", "0x99"],
+  "on_match" : {
+	"threshold" : 50,
+    "type" : "symbol",
+    "name" : "MT19937-1"
+  }
+}

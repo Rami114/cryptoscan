@@ -154,7 +154,7 @@ class CryptoScan(BackgroundTaskThread):
 
         progress_trigger = 5
         start_offset = self.br.offset
-        total_distance = len(self.bv)
+        total_distance = self.bv.length
 
         while not self.br.eof and not self.cancelled:
             debug = False
@@ -288,8 +288,8 @@ class CryptoScan(BackgroundTaskThread):
         for result in results:
             family = result.scan.family
             if family not in tag_types:
-                tag_types[family] = self.bv.create_tag_type(family, "📈")
-            self.bv.create_user_data_tag(result.address, tag_types[family], result.scan.name)
+                tag_types[family] = self.bv.create_tag_type(family, "🔐")
+            self.bv.add_tag(result.address, family, result.scan.name)
 
     def apply_symbols(self, results):
         for result in results:
