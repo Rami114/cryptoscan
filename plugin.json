@@ -16,7 +16,7 @@
 	},
 	"platforms" : ["Darwin", "Linux", "Windows"],
 	"dependencies": {},
-	"version": "1.0",
+	"version": "1.2",
 	"author": "Ben Pottier",
-	"minimumbinaryninjaversion": 1200
+	"minimumbinaryninjaversion": 4526
 }

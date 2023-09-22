@@ -16,6 +16,8 @@ The plugin supports the following types of scans:
  - Scanning for constants in data 
  - Scanning for constants in the IL 
 
+ Will additionally add a tag at each identified location with the family name as the data.
+
 ### Supported cryptography
 
 The following constants are defined in scan configurations:
@@ -41,6 +43,7 @@ The following constants are defined in scan configurations:
  - SM3: init
  - SM4: sbox, ck and fk
  - TEA: delta
+ - Mersenne Twister: 19937 edition
  - Zlib: distance_starts, distance_extrabits, length_starts, length_extrabits
 
 ### Reporting
