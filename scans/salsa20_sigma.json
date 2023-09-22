@@ -1,0 +1,19 @@
+  {
+    "threshold" : 50,
+    "name" : "Salsa20_sigma",
+    "description" : "Detects the sigma constant, used in the 256-bit version of Salsa20, i.e. the string 'expand 32-byte k'",
+    "family" : "Salsa20",
+    "type" : "static",
+    "size" : 4,
+    "flags" : [
+      "0x65", "0x78", "0x70", "0x61",
+      "0x6E", "0x64", "0x20", "0x33",
+      "0x32", "0x2D", "0x62", "0x79",
+      "0x74", "0x65", "0x20", "0x6B"
+    ],
+    "on_match" : {
+    "threshold" : 50,
+      "type" : "symbol",
+      "name" : "Salsa20_sigma"
+    }
+  }
