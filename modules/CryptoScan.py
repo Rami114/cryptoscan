@@ -154,7 +154,7 @@ class CryptoScan(BackgroundTaskThread):
 
         progress_trigger = 5
         start_offset = self.br.offset
-        total_distance = len(self.bv)
+        total_distance = self.bv.length
 
         while not self.br.eof and not self.cancelled:
             debug = False
